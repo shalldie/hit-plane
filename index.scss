@@ -8,9 +8,20 @@ body {
     overflow: hidden;
 }
 
+#loading {
+    position: absolute;
+    z-index: 9999;
+    color: #222;
+    left: 50%;
+    top: 10%;
+    transform:translateX(-50%);
+    font-size: 36px;
+    font-weight: bold;
+}
+
 #bg,
-#demo {
-    display: block;
+#app {
+    display: none;
     position: absolute;
     left: 50%;
     top: 50%;
@@ -19,7 +30,7 @@ body {
 }
 
 #bg {
-    display: block;
+    display: none;
     box-sizing: border-box;
     background: url('img/bg.jpg') repeat-y;
     background-size: 100% 50%;

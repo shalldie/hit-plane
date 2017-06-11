@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
@@ -55,9 +56,11 @@ module.exports = {
             filename: 'index.html',
             template: './index.html',
             inject: 'body',
-            hash: true,
-            minify: { removeComments: true, collapseWhitespace: true, minifyJS: true, minifyCSS: true }
+            // // hash: true,
+            minify: { removeComments: true, collapseWhitespace: true, minifyJS: true, minifyCSS: true },
+            inlineSource: '.(js|css)$'
         }),
+        new HtmlWebpackInlineSourcePlugin(),
         new CopyWebpackPlugin([    // 拷贝文件
             {
                 from: 'img',
