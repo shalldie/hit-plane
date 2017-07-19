@@ -4,7 +4,33 @@
 
 import Shape from '../shape/Shape';
 
-export function imgSpirit(
+function imgSpirit(ctx: CanvasRenderingContext2D, shape: Shape, onceCallback?: Function);
+
+function imgSpirit(ctx: CanvasRenderingContext2D, shape: Shape, onceCallback?: Function) {
+    if (shape.imgSum <= 1) {
+
+        return;
+    }
+
+    let diffTime = +new Date - shape.createTime; // 当前时间与创建时间的时间差
+    diffTime = diffTime % (shape.colourSpeed * shape.imgSum);
+
+    let nowIndex = ~~(diffTime / shape.colourSpeed);  // 当前要画的帧的索引
+
+    // let srcX, srcY, srcW, srcH, dstX, dstY, dstW, dstH;
+    let srcX = nowIndex * shape.img.width / shape.imgSum;
+    let srcY = 0;
+    let srcW = shape.img.width / shape.imgSum;
+    let srcH = shape.img.height;
+    // let dstX=srcX+shape.img
+
+    ctx.save();
+    ctx.globalAlpha=shape.opacity;
+    ctx.drawImage(shape.img,srcX,srcY,srcW,srcH)
+}
+
+
+function imgSpiritBase(
     ctx: CanvasRenderingContext2D,
     img: HTMLImageElement,
     speed: number,

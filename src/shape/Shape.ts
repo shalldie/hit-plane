@@ -18,10 +18,10 @@ abstract class Shape implements IShape {
     /**
      * 绘制所使用的图片
      * 
-     * @protected
+     * @public
      * @type {HTMLImageElement}@memberof Shape
      */
-    protected img: HTMLImageElement;
+    public img: HTMLImageElement;
 
     /**
      * 创建时间 (时间戳)
@@ -33,26 +33,18 @@ abstract class Shape implements IShape {
     /**
      * 渲染速度
      * 
-     * @protected
+     * @public
      * @type {number}@memberof Shape
      */
-    protected colourSpeed: number;
-
-    /**
-     * 是否X轴展开
-     * 
-     * @protected
-     * @type {boolean}@memberof Shape
-     */
-    protected ifXSpread: boolean = true;
+    public colourSpeed: number;
 
     /**
      * 雪碧图数量
      * 
-     * @protected
+     * @public
      * @type {number}@memberof Shape
      */
-    protected imgSum: number = 1;
+    public imgSum: number = 1;
 
     private _x: number = 0;
 
@@ -154,22 +146,15 @@ abstract class Shape implements IShape {
      */
     public opacity: number = 1;
 
-    private opacityTimer: number;
 
     /**
-     * 持续一段时间的半透明
+     * 用于控制opacity的定时器
      * 
-     * @param {number} opacity 半透明度
-     * @param {number} last 持续时间
+     * @private
+     * @type {number}
      * @memberof Shape
      */
-    public lastOpacity(opacity: number, last: number): void {
-        this.opacity = opacity;
-        clearTimeout(this.opacityTimer);
-        this.opacityTimer = setTimeout(() => {
-            this.opacity = 1;
-        }, last);
-    }
+    private _opacityTimer: number;
 
     constructor({ x, y, width, height, scale }: IShape) {
         this.x = x;
@@ -182,6 +167,22 @@ abstract class Shape implements IShape {
     public onPaint(ctx: CanvasRenderingContext2D): void {
         if (!this.alive) return;
     }
+
+    /**
+     * 持续一段时间的半透明
+     * 
+     * @param {number} opacity 半透明度
+     * @param {number} last 持续时间
+     * @memberof Shape
+     */
+    public lastOpacity(opacity: number, last: number): void {
+        this.opacity = opacity;
+        clearTimeout(this._opacityTimer);
+        this._opacityTimer = setTimeout(() => {
+            this.opacity = 1;
+        }, last);
+    }
+
 }
 
 export default Shape;
