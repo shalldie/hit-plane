@@ -105,5 +105,4 @@ export function imgDrawSingle(
         ctx.drawImage(img, fX, fY, fW, fH, tX, tY, tW, tH);
         ctx.restore();
     }
-
 }

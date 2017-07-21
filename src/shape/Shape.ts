@@ -182,7 +182,6 @@ abstract class Shape implements IShape {
             this.opacity = 1;
         }, last);
     }
-
 }
 
 export default Shape;
