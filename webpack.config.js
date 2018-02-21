@@ -3,6 +3,7 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackCleanPlugin = require('webpack-clean');
 
 module.exports = {
     entry: {
@@ -10,7 +11,7 @@ module.exports = {
     },
     output: {
         path: path.join(__dirname, 'dist'),
-        filename: 'js/[name].js'
+        filename: 'scripts/[name].js'
     },
     module: {
         rules: [
@@ -54,19 +55,22 @@ module.exports = {
     plugins: [
         new HtmlWebpackPlugin({  // html模板文件
             filename: 'index.html',
-            template: './index.html',
+            template: './resource/tpl.html',
             inject: 'body',
             // // hash: true,
-            minify: { removeComments: true, collapseWhitespace: true, minifyJS: true, minifyCSS: true },
+            minify: { removeComments: true, collapseWhitespace: true, minifyJS: false, minifyCSS: true },
             inlineSource: '.(js|css)$'
         }),
         new HtmlWebpackInlineSourcePlugin(),
         new CopyWebpackPlugin([    // 拷贝文件
             {
-                from: 'img',
+                from: 'resource/img',
                 to: 'img'
             }
-        ])
+        ]),
+        new WebpackCleanPlugin([
+            'dist/scripts'
+        ], __dirname)
     ],
     resolve: {
         extensions: ['.ts', '.js', '.json', '.scss']

@@ -6,7 +6,7 @@
 declare function require(moduleName: string): any;
 
 // 加载样式
-import '../index.scss';
+import '../resource/index.scss';
 
 // 画布 resize
 (() => {
