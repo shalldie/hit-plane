@@ -4,73 +4,70 @@
 //     ensure: (paths: string[], callback: (require: <T>(path: string) => T) => void) => void;
 // };
 declare function require(moduleName: string): any;
+import * as _ from './utils/tool';
+import g from './global';
+// polyfill
+import 'babel-polyfill';
 
 // 加载样式
 import '../resource/index.scss';
 
 // 画布 resize
 (() => {
-    let bg = <HTMLDivElement>document.getElementById("bg");
-    let ele = <HTMLCanvasElement>document.getElementById("app");
+    /**
+     * 背景尺寸调整
+     */
+    function resizeFunc() {
+        let background = g.background;
+        let bg = <HTMLDivElement>document.getElementById("bg");
+        let ele = <HTMLCanvasElement>document.getElementById("app");
 
-    ele.height = document.body.clientHeight * 2;
-    ele.width = ele.height * 512 / 768;
+        ele.height = document.body.clientHeight * 2;
+        ele.width = ele.height * background.width / background.height;
 
-    ele.style.cssText = `transform:translate3d(-50%,-50%,0) scale(.5)`;
+        // 缩放并居中
+        ele.style.cssText = `transform:translate3d(-50%,-50%,0) scale(.5)`;
 
-    bg.style.width = ele.width / 2 + "px";
-    bg.style.height = ele.height + "px";
+        bg.style.width = ele.width / 2 + "px";
+        bg.style.height = ele.height + "px";
+    }
+
+    window.addEventListener('resize', resizeFunc);
+    resizeFunc();
 })();
 
 // 预加载图片
-let imgSrcArr: string[] = [
-    "bg.jpg",
-    "boom.png",
-    "bullet01.png",
-    "bullet02.png",
-    "bullet03.png",
-    "enemy.png",
-    "enemy_bullet.png",
-    "heart.png",
-    "hp.png",
-    "plane.png"];
-
-
-let loadedImgCount: number = 0;
-
-/**
- * 根据图片地址返回一个预加载Promise
- * 
- * @param {string} imgSrc 
- * @returns {Promise<HTMLImageElement>} 
- */
-function updateLoading(imgSrc: string): Promise<HTMLImageElement> {
-    return new Promise<HTMLImageElement>(res => {
-        let img = new Image();
-        img.onload = function () {
-            loadedImgCount++;
-            let loadEle = document.getElementById('loading');
-            loadEle.innerHTML = 'loading......' + ~~(loadedImgCount * 100 / imgSrcArr.length) + '%';
-            if (loadedImgCount >= imgSrcArr.length) {
-                loadEle.parentNode.removeChild(loadEle);
-            }
-            res(img);
-        };
-        setTimeout(function () {
-
-            img.src = imgSrc;
-        }, Math.random() * 1000);
-    });
-}
-
 (async () => {
-    // 加载图片
-    let imgArr = await Promise.all(imgSrcArr.map(src => updateLoading('img/' + src)));
+    // 图片地址
+    let imgSrcArr: string[] = [
+        'bg.jpg',
+        'boom.png',
+        'bullet01.png',
+        'bullet02.png',
+        'bullet03.png',
+        'enemy.png',
+        'enemy_bullet.png',
+        'heart.png',
+        'hp.png',
+        'plane.png'
+    ];
+    // 图片加载数量
+    let imgLoadedCount: number = 0;
+    let loadEle = document.getElementById('loading');
+
+    function invokeImgLoadProgress() {
+        imgLoadedCount++;
+
+        loadEle.innerHTML =
+            'loading......' +
+            ~~(imgLoadedCount * 100 / imgSrcArr.length) +
+            '%';
+    }
+
+    // 所有图片加载完毕
+    await Promise.all(imgSrcArr.map(src => _.preloadImg(`img/${src}`)));
+    // 隐藏进度，显示游戏
+    loadEle.parentNode.removeChild(loadEle);
     document.getElementById('bg').style.display = 'block';
     document.getElementById('app').style.display = 'block';
-    let imgDict: object = {};
-    for (let i = 0, len = imgArr.length; i < len; i++) {  // for 要比 forEach,map 等效率高不少，，在V8下
-        let name = imgArr[i].src.replace(/^\S*\/|\.[^\.]*$/g, '');
-        if (name != 'bg') imgDict[name] = imgArr[i];
-    }
 })();
