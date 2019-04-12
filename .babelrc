@@ -1,13 +1,10 @@
 {
     "presets": [
         [
-            "env",
-            {
-                "useBuiltIns": true
-            }
+            "@babel/preset-env"
+            // {
+            //     "useBuiltIns": "entry"
+            // }
         ]
-    ],
-    "plugins": [
-        "transform-object-rest-spread"
     ]
 }

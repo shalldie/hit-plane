@@ -1,39 +1,46 @@
-interface IShape {
+
+/**
+ * 所有目标元素需要实现的接口
+ *
+ * @export
+ * @interface IShape
+ */
+export default interface IShape {
+
+    [key: string]: any;
 
     /**
-     * x 坐标
-     * 
-     * @type {number}@memberof IShape
+     * x坐标
+     *
+     * @type {number}
+     * @memberof IShape
      */
-    x: number,
+    x?: number;
+
 
     /**
-     * y 坐标
-     * 
-     * @type {number}@memberof IShape
+     * y坐标
+     *
+     * @type {number}
+     * @memberof IShape
      */
-    y: number,
+    y?: number;
+
 
     /**
      * 宽度
-     * 
-     * @type {number}@memberof IShape
+     *
+     * @type {number}
+     * @memberof IShape
      */
-    width: number,
+    width?: number;
+
 
     /**
      * 高度
-     * 
-     * @type {number}@memberof IShape
+     *
+     * @type {number}
+     * @memberof IShape
      */
-    height: number,
-
-    /**
-     * 比例
-     * 
-     * @type {number}@memberof IShape
-     */
-    scale: number
-};
-
-export default IShape;
+    height?: number;
+}
